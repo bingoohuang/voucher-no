@@ -64,10 +64,12 @@ public class BloomFilter {
      */
     public boolean add(byte[] bytes) {
         int[] hashes = MessageDigestUtils.createHashes(bytes, k);
+        int settedNum = 0;
         for (int hash : hashes) {
-            if (bitSet.set(Math.abs(hash % bitSetSize), true)) return false;
+            if (bitSet.set(Math.abs(hash % bitSetSize), true)) settedNum++;
         }
-        return true;
+
+        return settedNum < hashes.length;
     }
 
     /**
