@@ -25,8 +25,9 @@ public class VoucherNo {
 
     /**
      * Thread-safe method to get next random voucher no.
-     * @param maxTries
-     * @return
+     *
+     * @param maxTries max tries to try.
+     * @return random voucher NO.
      */
     public String next(int maxTries) {
         for (int i = 1; i <= maxTries; ++i) {

@@ -36,6 +36,7 @@ public class BloomFilter {
      *
      * @param falsePositiveProbability is the desired false positive probability.
      * @param expectedNumberOfElements is the expected number of elements in the Bloom filter.
+     * @param filterData               a BitSet representing an existing Bloom filter.
      */
     public BloomFilter(double falsePositiveProbability, int expectedNumberOfElements, JedisCommandsBitSet filterData) {
         this(Math.ceil(-(Math.log(falsePositiveProbability) / Math.log(2.0))) / Math.log(2.0), // c = k / ln(2)
@@ -49,6 +50,7 @@ public class BloomFilter {
      * toString() method is used as input to the hash functions.
      *
      * @param element is an element to register in the Bloom filter.
+     * @return added without conflicts or not.
      */
     public boolean add(String element) {
         return add(element.getBytes(MessageDigestUtils.UTF8));
@@ -58,6 +60,7 @@ public class BloomFilter {
      * Adds an array of bytes to the Bloom filter.
      *
      * @param bytes array of bytes to add to the Bloom filter.
+     * @return added without conflicts or not.
      */
     public boolean add(byte[] bytes) {
         int[] hashes = MessageDigestUtils.createHashes(bytes, k);
