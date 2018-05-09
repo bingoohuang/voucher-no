@@ -45,7 +45,7 @@ public class VoucherNo {
         int diff = len - s.length();
         if (diff < 0) {
             s.delete(len, s.length());
-        } else {
+        } else if (diff > 0) {
             padZero(s, diff);
         }
 
@@ -53,8 +53,6 @@ public class VoucherNo {
     }
 
     void padZero(StringBuilder s, int diff) {
-        if (diff == 0) return;
-
         for (int i = 0; i < diff; ++i) {
             s.append('0');
         }
