@@ -1,12 +1,10 @@
 package com.github.bingoohuang.voucherno;
 
-import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import redis.clients.jedis.JedisCommands;
 
 import java.security.SecureRandom;
 
-@Slf4j
 public class VoucherNo {
     private final int len;
     private final SecureRandom r = new SecureRandom();
