@@ -1,7 +1,7 @@
 package com.github.bingoohuang.voucherno;
 
 import lombok.val;
-import redis.clients.jedis.JedisCommands;
+import redis.clients.jedis.BinaryJedis;
 
 import java.security.SecureRandom;
 
@@ -10,12 +10,12 @@ public class VoucherNo {
     private final SecureRandom r = new SecureRandom();
     private final BloomFilter filter;
 
-    public VoucherNo(JedisCommands jedis, String redisKey, int len) {
+    public VoucherNo(BinaryJedis jedis, String redisKey, int len) {
         this(jedis, 0.001, 1000000, redisKey, len);
     }
 
-    public VoucherNo(JedisCommands jedis, double falsePositiveProbability, int expectedNumberOfElements, String redisKey, int len) {
-        this.filter = new BloomFilter(falsePositiveProbability, expectedNumberOfElements, new JedisCommandsBitSet(jedis, redisKey));
+    public VoucherNo(BinaryJedis jedis, double falsePositiveProbability, int expectedNumberOfElements, String redisKey, int len) {
+        this.filter = new BloomFilter(falsePositiveProbability, expectedNumberOfElements, new RedisBitSet(jedis, redisKey));
         this.len = len;
     }
 

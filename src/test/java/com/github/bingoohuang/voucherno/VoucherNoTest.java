@@ -17,6 +17,7 @@ public class VoucherNoTest {
     public static void beforeClass() {
         EmbeddedRedis.startRedis();
         voucherNo = new VoucherNo(new Jedis("127.0.0.1", EmbeddedRedis.port), "Voucher:No", 12);
+//        voucherNo = new VoucherNo(new Jedis(), "Voucher:No", 12);
     }
 
     @AfterClass

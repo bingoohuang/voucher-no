@@ -7,7 +7,7 @@ package com.github.bingoohuang.voucherno;
  * https://github.com/wxisme/bloomfilter
  */
 public class BloomFilter {
-    private final JedisCommandsBitSet bitSet;
+    private final RedisBitSet bitSet;
 
     private final int bitSetSize;
     private final int k; // number of hash functions
@@ -22,7 +22,7 @@ public class BloomFilter {
      * @param k          is the number of hash functions used.
      * @param filterData a BitSet representing an existing Bloom filter.
      */
-    public BloomFilter(double c, int n, int k, JedisCommandsBitSet filterData) {
+    public BloomFilter(double c, int n, int k, RedisBitSet filterData) {
         this.k = k;
         this.bitSetSize = (int) Math.ceil(c * n);
         this.bitSet = filterData;
@@ -38,7 +38,7 @@ public class BloomFilter {
      * @param expectedNumberOfElements is the expected number of elements in the Bloom filter.
      * @param filterData               a BitSet representing an existing Bloom filter.
      */
-    public BloomFilter(double falsePositiveProbability, int expectedNumberOfElements, JedisCommandsBitSet filterData) {
+    public BloomFilter(double falsePositiveProbability, int expectedNumberOfElements, RedisBitSet filterData) {
         this(Math.ceil(-(Math.log(falsePositiveProbability) / Math.log(2.0))) / Math.log(2.0), // c = k / ln(2)
                 expectedNumberOfElements,
                 (int) Math.ceil(-(Math.log(falsePositiveProbability) / Math.log(2.0))), filterData); // k = ceil(-log_2(false prob.))
@@ -63,13 +63,9 @@ public class BloomFilter {
      * @return added without conflicts or not.
      */
     public boolean add(byte[] bytes) {
-        int[] hashes = MessageDigestUtils.createHashes(bytes, k);
-        int settedNum = 0;
-        for (int hash : hashes) {
-            if (bitSet.set(Math.abs(hash % bitSetSize), true)) settedNum++;
-        }
+        int[] hashes = createHashes(bytes);
 
-        return settedNum < hashes.length;
+        return bitSet.set(hashes) > 0;
     }
 
     /**
@@ -93,11 +89,17 @@ public class BloomFilter {
      * @return true if the array could have been inserted into the Bloom filter.
      */
     public boolean contains(byte[] bytes) {
+        int[] hashes = createHashes(bytes);
+
+        return bitSet.get(hashes) == 0;
+    }
+
+    private int[] createHashes(byte[] bytes) {
         int[] hashes = MessageDigestUtils.createHashes(bytes, k);
-        for (int hash : hashes) {
-            if (!bitSet.get(Math.abs(hash % bitSetSize))) return false;
+        for (int i = 0; i < hashes.length; ++i) {
+            hashes[i] = Math.abs(hashes[i] % bitSetSize);
         }
-        return true;
+        return hashes;
     }
 
 
