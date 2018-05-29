@@ -65,7 +65,7 @@ public class BloomFilter {
     public boolean add(byte[] bytes) {
         int[] hashes = createHashes(bytes);
 
-        return bitSet.set(hashes) > 0;
+        return bitSet.add(hashes);
     }
 
     /**
@@ -91,7 +91,7 @@ public class BloomFilter {
     public boolean contains(byte[] bytes) {
         int[] hashes = createHashes(bytes);
 
-        return bitSet.get(hashes) == 0;
+        return bitSet.contains(hashes);
     }
 
     private int[] createHashes(byte[] bytes) {
