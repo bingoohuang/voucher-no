@@ -31,18 +31,16 @@ public class VoucherNoTest {
             val no = voucherNo.next();
             log.info("voucher NO:{}", no);
             assertThat(no).containsMatch("\\d{12}");
-            assertThat(voucherNo.contains(no)).isTrue();
+            assertThat(voucherNo.maybeContains(no)).isTrue();
         }
     }
 
     @Test
     public void padZero() {
         StringBuilder sb = new StringBuilder("1");
-        voucherNo.padZero(sb, 10);
-        assertThat(sb.toString()).isEqualTo("10000000000");
+        assertThat(Strs.padZero(sb, 10).toString()).isEqualTo("10000000000");
 
         StringBuilder s = new StringBuilder("1");
-        String n = voucherNo.fixedLength(s);
-        assertThat(n).isEqualTo("100000000000");
+        assertThat(Strs.fixedLength(s, 12).toString()).isEqualTo("100000000000");
     }
 }

@@ -31,34 +31,16 @@ public class VoucherNo {
      */
     public String next(int maxTries) {
         for (int i = 1; i <= maxTries; ++i) {
-            val s = new StringBuilder(32);
-            s.append(Math.abs(r.nextLong()));
-            String n = fixedLength(s);
-
-            if (filter.add(n)) return n;
+            val sb = new StringBuilder(32).append(Math.abs(r.nextLong()));
+            val s = Strs.fixedLength(sb, len).toString();
+            if (filter.add(s)) return s;
         }
 
         throw new RuntimeException("try out times");
     }
 
-    String fixedLength(StringBuilder s) {
-        int diff = len - s.length();
-        if (diff < 0) {
-            s.delete(len, s.length());
-        } else if (diff > 0) {
-            padZero(s, diff);
-        }
 
-        return s.toString();
-    }
-
-    void padZero(StringBuilder s, int diff) {
-        for (int i = 0; i < diff; ++i) {
-            s.append('0');
-        }
-    }
-
-    public boolean contains(String no) {
-        return filter.contains(no);
+    public boolean maybeContains(String no) {
+        return filter.maybeContains(no);
     }
 }

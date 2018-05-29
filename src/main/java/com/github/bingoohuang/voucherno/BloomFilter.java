@@ -8,7 +8,6 @@ package com.github.bingoohuang.voucherno;
  */
 public class BloomFilter {
     private final RedisBitSet bitSet;
-
     private final int bitSetSize;
     private final int k; // number of hash functions
 
@@ -63,9 +62,7 @@ public class BloomFilter {
      * @return added without conflicts or not.
      */
     public boolean add(byte[] bytes) {
-        int[] hashes = createHashes(bytes);
-
-        return bitSet.add(hashes);
+        return bitSet.add(createHashes(bytes));
     }
 
     /**
@@ -76,8 +73,8 @@ public class BloomFilter {
      * @param element element to check.
      * @return true if the element could have been inserted into the Bloom filter.
      */
-    public boolean contains(String element) {
-        return contains(element.getBytes(MessageDigestUtils.UTF8));
+    public boolean maybeContains(String element) {
+        return maybeContains(element.getBytes(MessageDigestUtils.UTF8));
     }
 
     /**
@@ -88,10 +85,8 @@ public class BloomFilter {
      * @param bytes array of bytes to check.
      * @return true if the array could have been inserted into the Bloom filter.
      */
-    public boolean contains(byte[] bytes) {
-        int[] hashes = createHashes(bytes);
-
-        return bitSet.contains(hashes);
+    public boolean maybeContains(byte[] bytes) {
+        return bitSet.maybeContains(createHashes(bytes));
     }
 
     private int[] createHashes(byte[] bytes) {
