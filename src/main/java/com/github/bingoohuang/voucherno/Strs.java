@@ -2,7 +2,7 @@ package com.github.bingoohuang.voucherno;
 
 import java.util.stream.IntStream;
 
-public class Strs {
+public abstract class Strs {
     public static StringBuilder fixedLength(StringBuilder s, int len) {
         int diff = len - s.length();
         if (diff < 0) return s.delete(len, s.length());
