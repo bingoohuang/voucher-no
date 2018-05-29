@@ -43,6 +43,7 @@
     </developers>
 
     <dependencies>
+
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
