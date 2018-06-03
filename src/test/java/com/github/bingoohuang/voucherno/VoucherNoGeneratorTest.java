@@ -34,6 +34,7 @@ public class VoucherNoGeneratorTest {
 
     @AfterClass
     public static void afterClass() {
+        generator.close();
         EmbeddedRedis.stopRedis();
     }
 

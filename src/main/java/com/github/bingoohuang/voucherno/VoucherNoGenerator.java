@@ -3,6 +3,7 @@ package com.github.bingoohuang.voucherno;
 import lombok.val;
 import redis.clients.jedis.BinaryJedis;
 
+import java.io.Closeable;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -10,7 +11,7 @@ import java.time.ZoneOffset;
 /**
  * 前缀为yMM格式的券号生成器。
  */
-public class VoucherNoGenerator {
+public class VoucherNoGenerator implements Closeable {
     private final BinaryJedis jedis;
     private final String keyPrefix;
     private VoucherNo voucherNo;
@@ -50,5 +51,9 @@ public class VoucherNoGenerator {
         val epochSecond = nextMonth.toEpochSecond(ZoneOffset.of("+8"));
 
         jedis.expireAt(keyBytes, epochSecond);
+    }
+
+    @Override public void close() {
+        jedis.close();
     }
 }

@@ -2,6 +2,8 @@ package com.github.bingoohuang.voucherno;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import mockit.Mock;
+import mockit.MockUp;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,5 +45,18 @@ public class VoucherNoTest {
 
         StringBuilder s = new StringBuilder("1");
         assertThat(Strs.fixedLength(s, 12).toString()).isEqualTo("100000000000");
+    }
+
+
+    @Test(expected = RuntimeException.class)
+    public void maxTries() {
+        new MockUp<BloomFilter>() {
+            @Mock
+            boolean add(String element) {
+                return false;
+            }
+        };
+
+        voucherNo.next();
     }
 }

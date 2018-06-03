@@ -15,8 +15,9 @@ public class JedisProxy {
             switch (m1.getName()) {
                 case "multi":
                     return Cglibs.proxy(Transaction.class, (o2, m2, args2, p2) -> {
-                        if (m2.getName().equals("close")) pooled.close();
-                        return m2.invoke(result, args2);
+                        Object o = m2.invoke(result, args2);
+                        if (m2.getName().equals("exec")) pooled.close();
+                        return o;
                     });
                 case "close":
                     jedisPool.destroy();

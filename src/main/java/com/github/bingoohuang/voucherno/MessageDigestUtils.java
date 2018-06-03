@@ -11,7 +11,7 @@ import java.security.MessageDigest;
  * You have any questions about this program please put issues on github to
  * https://github.com/wxisme/bloomfilter
  */
-public class MessageDigestUtils {
+public abstract class MessageDigestUtils {
     private static final String MD5 = "MD5";//SHA1,SHA256
     public static final Charset UTF8 = Charset.forName("UTF-8"); // encoding used for storing hash values as strings
 

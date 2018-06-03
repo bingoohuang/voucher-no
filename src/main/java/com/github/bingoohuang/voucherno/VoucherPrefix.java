@@ -2,7 +2,7 @@ package com.github.bingoohuang.voucherno;
 
 import java.time.LocalDate;
 
-public class VoucherPrefix {
+public abstract class VoucherPrefix {
     public static String getPrefix() {
         return getPrefix(LocalDate.now());
     }
