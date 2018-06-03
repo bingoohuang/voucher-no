@@ -6,6 +6,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -16,9 +18,18 @@ public class VoucherNoGeneratorTest {
     @BeforeClass
     public static void beforeClass() {
         EmbeddedRedis.startRedis();
-        Jedis jedis = new Jedis("127.0.0.1", EmbeddedRedis.port);
+//        Jedis jedis = new Jedis("127.0.0.1", EmbeddedRedis.port);
 //        Jedis jedis = new Jedis();
-        generator = new VoucherNoGenerator(jedis, "Voucher:No:");
+
+        val poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(5);
+        poolConfig.setMaxIdle(3);
+        poolConfig.setMaxWaitMillis(1000 * 10);
+        poolConfig.setTestOnBorrow(true);
+        val jedisPool = new JedisPool(poolConfig, "127.0.0.1", EmbeddedRedis.port, 2000);
+
+        Jedis proxy = JedisProxy.createJedisProxy(jedisPool);
+        generator = new VoucherNoGenerator(proxy, "Voucher:No:");
     }
 
     @AfterClass
