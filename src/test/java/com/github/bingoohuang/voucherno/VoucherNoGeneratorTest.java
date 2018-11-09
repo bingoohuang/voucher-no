@@ -1,5 +1,6 @@
 package com.github.bingoohuang.voucherno;
 
+import com.github.bingoohuang.utils.redis.JedisProxy;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.AfterClass;
